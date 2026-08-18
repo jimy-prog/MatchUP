@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { collection, addDoc, updateDoc, doc, getDocs, query, where, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, doc, getDocs, getDoc, query, where, deleteDoc } from 'firebase/firestore';
 import { db } from '@/firebase/config';
 import type { Venue, VenueStatus } from '@/types';
 
