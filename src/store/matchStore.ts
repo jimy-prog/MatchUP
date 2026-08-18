@@ -35,11 +35,13 @@ export const useMatchStore = create<MatchState>((set, get) => ({
   fetchMatches: async (filters) => {
     set({ isLoading: true });
     try {
-      let q = query(collection(db, 'matches'), orderBy('date', 'asc'));
-      if (filters?.sport) q = query(q, where('sport', '==', filters.sport));
-      if (filters?.status) q = query(q, where('status', '==', filters.status));
+      // Simple query: order by date only (avoids composite index requirements)
+      const q = query(collection(db, 'matches'), orderBy('date', 'asc'));
       const snapshot = await getDocs(q);
-      const matches = snapshot.docs.map(d => convertTimestamp({ id: d.id, ...d.data() }));
+      let matches = snapshot.docs.map(d => convertTimestamp({ id: d.id, ...d.data() }));
+      // Client-side filtering to avoid Firestore composite indexes
+      if (filters?.sport) matches = matches.filter(m => m.sport === filters.sport);
+      if (filters?.status) matches = matches.filter(m => m.status === filters.status);
       set({ matches, isLoading: false });
     } catch (error) {
       console.error('Error fetching matches:', error);
