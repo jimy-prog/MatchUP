@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Trophy, Calendar, Users, Plus, Settings, Bell } from 'lucide-react';
+import { ArrowLeft, Trophy, Calendar, Users, Plus, Settings, Bell, Database } from 'lucide-react';
 import { useAuthStore, useMatchStore, useVenueStore } from '@/store';
+import { seedVenues } from '@/lib/seed';
 
 export function DashboardPage() {
   const navigate = useNavigate();
@@ -138,13 +139,19 @@ export function DashboardPage() {
 
           {/* Developer Section */}
           {isDeveloper && (
-            <div className="bg-[#1C1C1E] rounded-2xl p-5 border border-white/[0.06]">
+            <div className="bg-[#1C1C1E] rounded-2xl p-5 border border-white/[0.06] mb-6">
               <h3 className="font-semibold text-white mb-3">Admin Overview</h3>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-3 gap-3 mb-4">
                 <div className="text-center"><p className="text-lg font-bold text-system-green">--</p><p className="text-[10px] text-white/40">Users</p></div>
                 <div className="text-center"><p className="text-lg font-bold text-system-blue">--</p><p className="text-[10px] text-white/40">Venues</p></div>
                 <div className="text-center"><p className="text-lg font-bold text-system-orange">--</p><p className="text-[10px] text-white/40">Matches</p></div>
               </div>
+              <button 
+                onClick={() => seedVenues().then(() => alert('5 venues seeded! Refresh to see them.')).catch(console.error)}
+                className="w-full flex items-center justify-center gap-2 bg-system-green/10 text-system-green py-2.5 rounded-xl text-sm font-medium hover:bg-system-green/20 transition-colors"
+              >
+                <Database className="w-4 h-4" /> Seed Venues (Dev)
+              </button>
             </div>
           )}
         </motion.div>
